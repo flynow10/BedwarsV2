@@ -28,6 +28,7 @@ public class ItemShopPreset implements ShopPreset {
     {
         AddBlockItems();
         AddCombatItems();
+        AddRangedItems();
         AddToolItems();
         AddArmorItems();
         AddSpecialItems();
@@ -178,6 +179,59 @@ public class ItemShopPreset implements ShopPreset {
                 return true;
             }
             return false;
+        }));
+    }
+
+    private void AddRangedItems()
+    {
+        shopItems.add(new ShopItem(ShopCategory.RANGED, player -> {
+            ItemStack stack = new ItemStack(Material.BOW);
+            ItemMeta stackMeta = stack.getItemMeta();
+            stackMeta.setDisplayName("Bow");
+            stack.setItemMeta(stackMeta);
+            return stack;
+        }, player -> Material.GOLD_INGOT, player -> 12, player -> {
+            ItemStack stack = new ItemStack(Material.BOW);
+            player.getPlayer().getInventory().addItem(stack);
+            return true;
+        }));
+        shopItems.add(new ShopItem(ShopCategory.RANGED, player -> {
+            ItemStack stack = new ItemStack(Material.BOW);
+            ItemMeta stackMeta = stack.getItemMeta();
+            stackMeta.setDisplayName("Bow ( Power I )");
+            stack.setItemMeta(stackMeta);
+            stack = GlowEnchantment.ApplyGlow(stack);
+            return stack;
+        }, player -> Material.GOLD_INGOT, player -> 24, player -> {
+            ItemStack stack = new ItemStack(Material.BOW);
+            stack.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
+            player.getPlayer().getInventory().addItem(stack);
+            return true;
+        }));
+        shopItems.add(new ShopItem(ShopCategory.RANGED, player -> {
+            ItemStack stack = new ItemStack(Material.BOW);
+            ItemMeta stackMeta = stack.getItemMeta();
+            stackMeta.setDisplayName("Bow ( Power II, Punch II)");
+            stack.setItemMeta(stackMeta);
+            stack = GlowEnchantment.ApplyGlow(stack);
+            return stack;
+        }, player -> Material.EMERALD, player -> 6, player -> {
+            ItemStack stack = new ItemStack(Material.BOW);
+            stack.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
+            stack.addEnchantment(Enchantment.ARROW_KNOCKBACK, 2);
+            player.getPlayer().getInventory().addItem(stack);
+            return true;
+        }));
+        shopItems.add(new ShopItem(ShopCategory.RANGED, player -> {
+            ItemStack stack = new ItemStack(Material.ARROW, 8);
+            ItemMeta stackMeta = stack.getItemMeta();
+            stackMeta.setDisplayName("Arrows x 8");
+            stack.setItemMeta(stackMeta);
+            return stack;
+        }, player -> Material.GOLD_INGOT, player -> 2, player -> {
+            ItemStack stack = new ItemStack(Material.ARROW, 8);
+            player.getPlayer().getInventory().addItem(stack);
+            return true;
         }));
     }
 
@@ -394,6 +448,56 @@ public class ItemShopPreset implements ShopPreset {
             player.getPlayer().getInventory().addItem(spawnEgg.toItemStack(1));
             return true;
         }));
+        shopItems.add(new ShopItem(ShopCategory.SPECIAL, player -> {
+            ItemStack stack = new ItemStack(Material.FIREBALL);
+            ItemMeta stackMeta = stack.getItemMeta();
+            stackMeta.setDisplayName("Fireball");
+            stack.setItemMeta(stackMeta);
+            return stack;
+        }, player -> Material.IRON_INGOT, player -> 40, player -> {
+            player.getPlayer().getInventory().addItem(new ItemStack(Material.FIREBALL));
+            return true;
+        }));
+        shopItems.add(new ShopItem(ShopCategory.SPECIAL, player -> {
+            ItemStack stack = new ItemStack(Material.TNT);
+            ItemMeta stackMeta = stack.getItemMeta();
+            stackMeta.setDisplayName("TNT");
+            stack.setItemMeta(stackMeta);
+            return stack;
+        }, player -> Material.GOLD_INGOT, player -> 4, player -> {
+            player.getPlayer().getInventory().addItem(new ItemStack(Material.TNT));
+            return true;
+        }));
+        shopItems.add(new ShopItem(ShopCategory.SPECIAL, player -> {
+            ItemStack stack = new ItemStack(Material.ENDER_PEARL);
+            ItemMeta stackMeta = stack.getItemMeta();
+            stackMeta.setDisplayName("Ender Pearl");
+            stack.setItemMeta(stackMeta);
+            return stack;
+        }, player -> Material.EMERALD, player -> 4, player -> {
+            player.getPlayer().getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
+            return true;
+        }));
+        shopItems.add(new ShopItem(ShopCategory.SPECIAL, player -> {
+            ItemStack stack = new ItemStack(Material.WATER_BUCKET);
+            ItemMeta stackMeta = stack.getItemMeta();
+            stackMeta.setDisplayName("MLG bucket");
+            stack.setItemMeta(stackMeta);
+            return stack;
+        }, player -> Material.GOLD_INGOT, player -> 3, player -> {
+            player.getPlayer().getInventory().addItem(new ItemStack(Material.WATER_BUCKET));
+            return true;
+        }));
+        shopItems.add(new ShopItem(ShopCategory.SPECIAL, player -> {
+            ItemStack stack = new ItemStack(Material.SPONGE, 4);
+            ItemMeta stackMeta = stack.getItemMeta();
+            stackMeta.setDisplayName("Sponge");
+            stack.setItemMeta(stackMeta);
+            return stack;
+        }, player -> Material.GOLD_INGOT, player -> 3, player -> {
+            player.getPlayer().getInventory().addItem(new ItemStack(Material.SPONGE, 4));
+            return true;
+        }));
     }
     @Override
     public ShopCategory getFirstCategory() {
@@ -457,6 +561,7 @@ public class ItemShopPreset implements ShopPreset {
         List<ShopCategory> categories = new ArrayList<>();
         categories.add(ShopCategory.BLOCKS);
         categories.add(ShopCategory.COMBAT);
+        categories.add(ShopCategory.RANGED);
         categories.add(ShopCategory.TOOLS);
         categories.add(ShopCategory.ARMOR);
         categories.add(ShopCategory.SPECIAL);

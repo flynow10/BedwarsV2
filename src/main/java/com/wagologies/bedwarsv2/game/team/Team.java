@@ -1,6 +1,7 @@
 package com.wagologies.bedwarsv2.game.team;
 
 import com.github.juliarn.npc.NPC;
+import com.github.juliarn.npc.NPCPool;
 import com.github.juliarn.npc.profile.Profile;
 import com.google.common.collect.Lists;
 import com.wagologies.bedwarsv2.BedwarsV2;
@@ -180,8 +181,8 @@ public class Team {
         if(effect) {
             getGame().getWorld().playSound(getBedBlock(1), Sound.ENDERDRAGON_GROWL, 10, 1);
             getGame().getWorld().strikeLightningEffect(getBedBlock(1));
+            DisplayPackets.sendJsonMessage(getGame().getWorld(), "[{text:'" + getName().replace("'", "\\'").replace("\"", "\\\"") +"\\'s', color:'" + getColor().toLowerCase() +"', bold: true},{ text:' bed was broken!', color:'red', bold: false}]");
         }
-        //DisplayPackets.sendJsonMessage(getGame().getWorld(), "[{text:'This is a json message', color:'red'},{ text:'Hover!', hoverEvent:{action:'show_text', value: 'This is a hovered text'}}]");
     }
 
     public void RespawnBed()
@@ -191,15 +192,28 @@ public class Team {
             player.RespawnBed();
         }
         updateScoreboard();
+        DisplayPackets.sendJsonMessage(getGame().getWorld(), "[{text:'" + getName().replace("'", "\\'").replace("\"", "\\\"") +"\\'s', color:'" + getColor().toLowerCase() +"', bold: true},{ text:' bed was respawned!', color:'green', bold: false}]");
     }
 
     public void EndGame()
     {
+        EndGame(false);
+    }
+    public void EndGame(boolean prematurly)
+    {
         ironGenerator.Stop();
         goldGenerator.Stop();
+        BedwarsV2.npcPool.removeNPC(upgradeShopId);
+        BedwarsV2.npcPool.removeNPC(itemShopId);
         //lookAtPlayerTask.cancel();
         for (Player player : getPlayerList()) {
-            DisplayPackets.sendTitle(player.getPlayer(), ChatColor.RED + "Game Over", "Maybe next time", 10 ,100 ,10);
+            if(!prematurly) {
+                DisplayPackets.sendTitle(player.getPlayer(), ChatColor.RED + "Game Over", "Maybe next time", 10, 100, 10);
+            }
+            else
+            {
+                DisplayPackets.sendTitle(player.getPlayer(), ChatColor.RED + "Game Ended", "The game was ended by an admin", 10, 100 ,10);
+            }
         }
     }
 
@@ -215,6 +229,7 @@ public class Team {
         for (Player player : playerList) {
             player.RemoveListener();
         }
+        BED.UnregisterListener();
     }
 
     /*** END PUBLIC METHODS ***/
@@ -235,6 +250,16 @@ public class Team {
     public void OnFinalDeath(Player player)
     {
         playersAlive--;
+        getGame().VictoryCheck();
+        updateScoreboard();
+    }
+
+    public void PlayerDisconnect(Player player)
+    {
+        playersAlive--;
+        if(playersAlive == 0 && !BED.getIsBedBroken())
+            BED.BreakBed();
+        playerList.remove(player);
         getGame().VictoryCheck();
         updateScoreboard();
     }

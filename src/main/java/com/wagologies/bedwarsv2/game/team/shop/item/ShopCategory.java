@@ -9,6 +9,7 @@ public enum ShopCategory {
     COMBAT(Material.IRON_SWORD, "Combat"),
     TOOLS(Material.IRON_PICKAXE, "Tools"),
     ARMOR(Material.IRON_CHESTPLATE, "Armor"),
+    RANGED(Material.BOW, "Ranged"),
     SPECIAL(Material.TNT, "Special"),
     UPGRADES(Material.ENCHANTED_BOOK, "Upgrades"),
     ISLANDBUFFS(Material.BED, "Island Buffs");

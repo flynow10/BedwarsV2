@@ -16,6 +16,7 @@ import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class PlayerListener implements Listener {
     private Player player;
@@ -41,6 +42,7 @@ public class PlayerListener implements Listener {
             player.OpenShop(preset);
         }
     }
+
     @EventHandler
     public void DisableCrafting(CraftItemEvent event)
     {
@@ -52,6 +54,7 @@ public class PlayerListener implements Listener {
                     event.setCancelled(true);
         }
     }
+
     @EventHandler
     public void DeathCheck(EntityDamageEvent event)
     {
@@ -75,6 +78,7 @@ public class PlayerListener implements Listener {
             }
         }
     }
+
     @EventHandler(priority = EventPriority.NORMAL)
     public void preventArmorRemoving(InventoryClickEvent event)
     {
@@ -83,12 +87,23 @@ public class PlayerListener implements Listener {
             event.setCancelled(true);
         }
     }
+
     @EventHandler
     public void ChatPrefix(AsyncPlayerChatEvent event)
     {
         if(event.getPlayer().equals(player.getPlayer()))
         {
             event.setFormat(ChatColor.WHITE + "[" + player.getTeam().getName() + ChatColor.WHITE + "]" + ChatColor.valueOf(player.getTeam().getColor()) + " %s" + ChatColor.WHITE + "> %s");
+        }
+    }
+
+    @EventHandler
+    public void PlayerDisconnect(PlayerQuitEvent event)
+    {
+        if(event.getPlayer().equals(player.getPlayer()))
+        {
+            player.Disconnect();
+            event.setQuitMessage("");
         }
     }
 }

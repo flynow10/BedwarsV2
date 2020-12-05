@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.json.simple.JSONObject;
 
 import java.util.Arrays;
 
@@ -389,6 +390,8 @@ public class Player {
         {
             getTeam().getGame().getWorld().dropItem(player.getLocation(), new ItemStack(Material.EMERALD, emerald));
         }
+        getTeam().getGame().getWorld().playEffect(player.getLocation().add(0, 1, 0), Effect.STEP_SOUND, 152);
+        getTeam().getGame().getWorld().playSound(player.getLocation().add(0, 1, 0), Sound.ORB_PICKUP, 100, 0.6f);
         if(pickaxe != Pickaxe.NONE && pickaxe != Pickaxe.WOOD)
             pickaxe = pickaxe.previous();
         if(axe != Axe.NONE && axe != Axe.WOOD)
@@ -400,11 +403,13 @@ public class Player {
         if(getTeam().getBED().getIsBedBroken())
         {
             playerAlive = false;
+            DisplayPackets.sendJsonMessage(team.getGame().getWorld(), "[{text: '" + player.getDisplayName().replace("'", "\\'").replace("\"", "\\\"") + "', color: '" + team.getColor().toLowerCase() + "', bold: true}, {text: ' died', bold: false, color:'white'}, { text: ' FINAL KILL.', color: 'aqua'}]");
             DisplayPackets.sendTitle(player, ChatColor.RED + "You Died", "You won't respawn because your bed is broken", 10, 40, 10);
             getTeam().OnFinalDeath(this);
         }
         else
         {
+            DisplayPackets.sendJsonMessage(team.getGame().getWorld(), "[{text: '" + player.getDisplayName().replace("'", "\\'").replace("\"", "\\\"") + "', color: '" + team.getColor().toLowerCase() + "', bold: true}, {text: ' died.', bold: false, color:'white'}]");
             DisplayPackets.sendTitle(player, ChatColor.RED + "You Died", "Respawning in 5 seconds", 10, 40, 10);
             Bukkit.getScheduler().runTaskLater(BedwarsV2.getInstance(), this::OnRespawn, 100);
         }
@@ -421,6 +426,14 @@ public class Player {
     public void RemoveListener()
     {
         HandlerList.unregisterAll(listener);
+    }
+
+
+    public void Disconnect()
+    {
+        playerAlive = false;
+        DisplayPackets.sendJsonMessage(team.getGame().getWorld(), "[{text: '" + player.getDisplayName().replace("'", "\\'").replace("\"", "\\\"") + "', color: '" + team.getColor().toLowerCase() + "', bold: true}, {text: ' disconnected.', bold: false, color:'white'}]");
+        getTeam().PlayerDisconnect(this);
     }
 
     /**** END DEATH/RESPAWN ***/

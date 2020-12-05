@@ -9,6 +9,8 @@ commands:
   startgame:
     usage: /startgame
     description: Starts a new game of bedwars with only you
+    permission: bedwars.startGame
   bmenu:
     usage: /bmenu
     description: Open debug menu for bedwars
+    permission: bedwars.admin

@@ -14,7 +14,7 @@ import java.util.Queue;
 public class EventManager {
 
     private Queue<Event> eventQueue = new LinkedList<>();
-
+    private boolean shouldRunEventNow = false;
     private Game game;
 
     public EventManager(Game game)
@@ -39,8 +39,13 @@ public class EventManager {
     private void Timer(int seconds)
     {
         if(game.getIsRunning()) {
-            if (seconds == 0) {
-                RunEvent();
+            if (seconds == 0 || shouldRunEventNow) {
+                shouldRunEventNow = false;
+                try {
+                    RunEvent();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 NextEvent();
             }
             else {
@@ -67,6 +72,11 @@ public class EventManager {
             if (event != null)
                 event.RunEvent(game);
         }
+    }
+
+    public void RunEventNow()
+    {
+        shouldRunEventNow = true;
     }
 
     public void AddQueueItems(Event...events)

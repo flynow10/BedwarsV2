@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -19,6 +20,7 @@ public class Bed {
     private final Team team;
     private Location bedBlock1, bedBlock2;
     public boolean isBedBroken;
+    private BedListener listener;
 
     public Bed(Team team)
     {
@@ -26,7 +28,7 @@ public class Bed {
         bedBlock1 = team.getBedBlock(1);
         bedBlock2 = team.getBedBlock(2);
         isBedBroken = false;
-        new BedListener(this);
+        listener = new BedListener(this);
     }
 
     public void BreakBed()
@@ -60,6 +62,11 @@ public class Bed {
             isBedBroken = false;
             team.RespawnBed();
         }
+    }
+
+    public void UnregisterListener()
+    {
+        HandlerList.unregisterAll(listener);
     }
 
     /***** GETTER METHODS *****/

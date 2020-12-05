@@ -9,6 +9,7 @@ import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 
 public class BedListener implements Listener {
 
@@ -19,6 +20,15 @@ public class BedListener implements Listener {
         this.bed = bed;
         Bukkit.getPluginManager().registerEvents(this, BedwarsV2.getInstance());
     }
+    /*@EventHandler
+    public void EnderDragonBreak(EntityChangeBlockEvent event)
+    {
+        if(event.getBlock().equals(bed.getBedBlock(1).getBlock()) || event.getBlock().equals(bed.getBedBlock(2).getBlock())){
+            if(!event.isCancelled())
+                event.setCancelled(true);
+        }
+    }*/
+
     @EventHandler
     public void BedBreak(BlockBreakEvent event)
     {

@@ -9,6 +9,7 @@ import com.wagologies.bedwarsv2.game.menu.MainMenu;
 import com.wagologies.bedwarsv2.game.menu.Menu;
 import com.wagologies.bedwarsv2.game.team.Team;
 import com.wagologies.bedwarsv2.utils.ConfigReader;
+import com.wagologies.bedwarsv2.utils.DisplayPackets;
 import net.minecraft.server.v1_8_R3.EntityLiving;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -166,9 +167,13 @@ public class Game {
             }
         }));
         eventManager.AddQueueItems(new Event("Sudden Death", 900, game -> {
-            EnderDragon dragon = (EnderDragon) game.getWorld().spawnEntity(new Location(game.getWorld(), 0,120,0), EntityType.ENDER_DRAGON);
-            CraftEnderDragon craftEnderDragon = (CraftEnderDragon) dragon;
-            craftEnderDragon.getHandle().setGoalTarget((EntityLiving) game.getBedwarsTeams().get(0).getPlayerList().get(0).getPlayer());
+            for (Team bedwarsTeam : bedwarsTeams) {
+                if(bedwarsTeam.getPlayersAlive() > 0)
+                {
+                    EnderDragon dragon = (EnderDragon) game.getWorld().spawnEntity(new Location(game.getWorld(), 0,120,0), EntityType.ENDER_DRAGON);
+                    dragon.setCustomName(ChatColor.valueOf(bedwarsTeam.getColor()) + bedwarsTeam.getName() + "'s dragon");
+                }
+            }
         }));
     }
 
@@ -254,6 +259,29 @@ public class Game {
         new Menu(this, player, new MainMenu());
     }
 
+    public void EndGame() {
+        isRunning = false;
+        for (Team bedwarsTeam : bedwarsTeams) {
+            bedwarsTeam.EndGame(true);
+        }
+        HandlerList.unregisterAll(listener);
+        for (Generator emeraldGen : emeraldGens) {
+            emeraldGen.Stop();
+        }
+        for (Generator diamondGen : diamondGens) {
+            diamondGen.Stop();
+        }
+        for(Team team : bedwarsTeams)
+        {
+            team.RemoveListeners();
+        }
+        world.getPlayers().forEach(player -> {
+            player.getInventory().clear();
+            player.getEquipment().clear();
+            player.setHealth(20);
+        });
+    }
+
     /*** END PUBLIC METHODS ***/
 
     /***** GETTER METHODS *****/
@@ -271,6 +299,8 @@ public class Game {
     public ScoreboardManager getScoreboardManager() { return scoreboardManager; }
 
     public boolean isAllBedsBroken() { return allBedsBroken; }
+
+    public EventManager getEventManager() { return eventManager; }
 
     public int getExtraLines() { return 5; }
     /*** END GETTER METHODS ***/
