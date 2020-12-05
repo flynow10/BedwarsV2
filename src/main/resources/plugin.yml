@@ -1,0 +1,14 @@
+name: BedwarsV2
+version: ${project.version}
+main: com.wagologies.bedwarsv2.BedwarsV2
+authors: [flynow10]
+depend: [ProtocolLib]
+description: The second edition of my bedwars practice plugin
+website: wagologies.com
+commands:
+  startgame:
+    usage: /startgame
+    description: Starts a new game of bedwars with only you
+  bmenu:
+    usage: /bmenu
+    description: Open debug menu for bedwars
