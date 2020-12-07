@@ -37,4 +37,13 @@ public class DisplayPackets {
             sendJsonMessage(player, json);
         }
     }
+
+    public static void sendActionBar(Player player, String json)
+    {
+        CraftPlayer craftPlayer = (CraftPlayer) player;
+        PlayerConnection playerConnection = craftPlayer.getHandle().playerConnection;
+        IChatBaseComponent message = IChatBaseComponent.ChatSerializer.a(json);
+        PacketPlayOutChat actionMessage = new PacketPlayOutChat(message, (byte) 2);
+        playerConnection.sendPacket(actionMessage);
+    }
 }

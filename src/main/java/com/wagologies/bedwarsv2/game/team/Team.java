@@ -15,6 +15,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Objective;
@@ -230,6 +231,7 @@ public class Team {
             player.RemoveListener();
         }
         BED.UnregisterListener();
+        HandlerList.unregisterAll(listener);
     }
 
     /*** END PUBLIC METHODS ***/
@@ -241,6 +243,9 @@ public class Team {
         String colorText = ChatColor.valueOf(color).toString();
         String entry = colorText + ChatColor.BOLD.toString() + name + " " + getObjectiveString();
         getGame().getScoreboardManager().Set(entry, ID + getGame().getExtraLines());
+        for (Player player : playerList) {
+            getGame().getScoreboardManager().Set(player.getPlayer(), entry + ChatColor.RESET + ChatColor.GRAY + " (You)", ID + getGame().getExtraLines());
+        }
     }
 
     /*** END PRIVATE METHODS **/

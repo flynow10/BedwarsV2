@@ -39,10 +39,9 @@ public class StartGame implements CommandExecutor {
             teams.add(new ArrayList<>());
             teams.add(new ArrayList<>());
             teams.add(new ArrayList<>());
-            if(args.length == 1)
-            {
-                Player player2 = Bukkit.getPlayer(args[0]);
-                teams.get(ThreadLocalRandom.current().nextInt(1, 8)).add(player2);
+            for (int i = 0; i < args.length; i++) {
+                String name = args[i];
+                teams.get(i+1).add(Bukkit.getPlayer(name));
             }
             BedwarsV2.getInstance().game = new Game(teams, new File(BedwarsV2.getInstance().getCopier().WORLD_FOLDER.getAbsolutePath() + File.separatorChar + "Bedwars Template 3"), new File(BedwarsV2.getInstance().getCopier().WORLD_FOLDER.getAbsolutePath() + File.separatorChar + "Bedwars Template3.yml"));
             return true;

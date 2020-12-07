@@ -7,13 +7,17 @@ import com.wagologies.bedwarsv2.game.team.shop.item.ShopCategory;
 import com.wagologies.bedwarsv2.game.team.shop.item.ShopItem;
 import com.wagologies.bedwarsv2.utils.GlowEnchantment;
 import javafx.scene.effect.Glow;
-import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
+import net.minecraft.server.v1_8_R3.EntityHuman;
+import net.minecraft.server.v1_8_R3.NBTTagCompound;
+import net.minecraft.server.v1_8_R3.PathfinderGoalLookAtPlayer;
+import org.bukkit.*;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MonsterEggs;
 import org.bukkit.material.SpawnEgg;
 import org.bukkit.material.Wool;
 
@@ -192,6 +196,10 @@ public class ItemShopPreset implements ShopPreset {
             return stack;
         }, player -> Material.GOLD_INGOT, player -> 12, player -> {
             ItemStack stack = new ItemStack(Material.BOW);
+            ItemMeta meta = stack.getItemMeta();
+            meta.spigot().setUnbreakable(true);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            stack.setItemMeta(meta);
             player.getPlayer().getInventory().addItem(stack);
             return true;
         }));
@@ -204,6 +212,10 @@ public class ItemShopPreset implements ShopPreset {
             return stack;
         }, player -> Material.GOLD_INGOT, player -> 24, player -> {
             ItemStack stack = new ItemStack(Material.BOW);
+            ItemMeta meta = stack.getItemMeta();
+            meta.spigot().setUnbreakable(true);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            stack.setItemMeta(meta);
             stack.addEnchantment(Enchantment.ARROW_DAMAGE, 1);
             player.getPlayer().getInventory().addItem(stack);
             return true;
@@ -217,6 +229,10 @@ public class ItemShopPreset implements ShopPreset {
             return stack;
         }, player -> Material.EMERALD, player -> 6, player -> {
             ItemStack stack = new ItemStack(Material.BOW);
+            ItemMeta meta = stack.getItemMeta();
+            meta.spigot().setUnbreakable(true);
+            meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+            stack.setItemMeta(meta);
             stack.addEnchantment(Enchantment.ARROW_DAMAGE, 2);
             stack.addEnchantment(Enchantment.ARROW_KNOCKBACK, 2);
             player.getPlayer().getInventory().addItem(stack);
@@ -436,7 +452,7 @@ public class ItemShopPreset implements ShopPreset {
             player.getPlayer().getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE));
             return true;
         }));
-        shopItems.add(new ShopItem(ShopCategory.SPECIAL, player -> {
+        /*shopItems.add(new ShopItem(ShopCategory.SPECIAL, player -> {
             SpawnEgg spawnEgg = new SpawnEgg(EntityType.IRON_GOLEM);
             ItemStack stack = spawnEgg.toItemStack(1);
             ItemMeta stackMeta = stack.getItemMeta();
@@ -444,10 +460,10 @@ public class ItemShopPreset implements ShopPreset {
             stack.setItemMeta(stackMeta);
             return stack;
         }, player -> Material.IRON_INGOT, player -> 120, player -> {
-            SpawnEgg spawnEgg = new SpawnEgg(EntityType.IRON_GOLEM);
-            player.getPlayer().getInventory().addItem(spawnEgg.toItemStack(1));
+            ItemStack spawnEgg = new ItemStack(Material.MONSTER_EGG, 1, (short) 99);
+            player.getPlayer().getInventory().addItem(CraftItemStack.asBukkitCopy(itemStackNMS));
             return true;
-        }));
+        }));*/
         shopItems.add(new ShopItem(ShopCategory.SPECIAL, player -> {
             ItemStack stack = new ItemStack(Material.FIREBALL);
             ItemMeta stackMeta = stack.getItemMeta();

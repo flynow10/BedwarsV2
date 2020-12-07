@@ -24,10 +24,12 @@ public class TeamListener implements Listener {
     public void ProtectedBlocks(BlockPlaceEvent event)
     {
         if(event.getPlayer().getGameMode() != GameMode.CREATIVE) {
-            if (event.getBlockPlaced().getLocation().distance(team.getSpawnLocation().getBlock().getLocation()) < 5) {
-                event.getPlayer().sendMessage(ChatColor.RED + "This area is protected");
-                if (!event.isCancelled())
-                    event.setCancelled(true);
+            if(event.getBlockPlaced().getWorld().equals(team.getSpawnLocation().getWorld())) {
+                if (event.getBlockPlaced().getLocation().distance(team.getSpawnLocation().getBlock().getLocation()) < 5) {
+                    event.getPlayer().sendMessage(ChatColor.RED + "This area is protected");
+                    if (!event.isCancelled())
+                        event.setCancelled(true);
+                }
             }
         }
     }
