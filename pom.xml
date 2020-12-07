@@ -6,7 +6,7 @@
 
     <groupId>com.wagologies</groupId>
     <artifactId>BedwarsV2</artifactId>
-    <version>0.1</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>BedwarsV2</name>
